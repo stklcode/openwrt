@@ -210,3 +210,19 @@ define KernelPackage/input-leds/description
 endef
 
 $(eval $(call KernelPackage,input-leds))
+
+
+define KernelPackage/leds-spi-byte
+  SUBMENU:=$(LEDS_MENU)
+  TITLE:=simple SPI LED controller support
+  KCONFIG:=CONFIG_LEDS_SPI_BYTE CONFIG_SPI_GPIO_DELAY
+  FILES:=$(LINUX_DIR)/drivers/leds/leds-spi-byte.ko
+  AUTOLOAD:=$(call AutoLoad,60,leds-spi-byte,1)
+endef
+
+define KernelPackage/leds-spi-byte/description
+ Kernel module for simple SPI LED controllers that use only a single byte for
+ setting the brightness. For example used in Ubiquiti airCube ISP/AC.
+endef
+
+$(eval $(call KernelPackage,leds-spi-byte))
