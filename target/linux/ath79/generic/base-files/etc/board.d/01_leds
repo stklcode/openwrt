@@ -455,6 +455,10 @@ ubnt,rocket-m)
 	ucidef_set_led_rssi "rssimediumhigh" "RSSIMEDIUMHIGH" "green:link3" "wlan0" "51" "100"
 	ucidef_set_led_rssi "rssihigh" "RSSIHIGH" "green:link4" "wlan0" "76" "100"
 	;;
+ubnt,aircube-ac|\
+ubnt,aircube-isp)
+	ucidef_set_led_default "system" "SYSTEM" "ubnt:white:status" "1"
+	;;
 wallys,dr531)
 	ucidef_set_led_netdev "lan" "LAN" "green:lan" "eth0"
 	ucidef_set_led_switch "wan" "WAN" "green:wan" "switch0" "0x2"
