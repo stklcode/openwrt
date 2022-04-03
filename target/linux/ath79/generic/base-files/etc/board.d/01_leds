@@ -490,6 +490,10 @@ tplink,tl-wr941hp-v1)
 trendnet,tew-823dru)
 	ucidef_set_led_netdev "wan" "WAN" "green:planet" "eth0"
 	;;
+ubnt,aircube-ac|\
+ubnt,aircube-isp)
+	ucidef_set_led_default "system" "SYSTEM" "white:status" "1"
+	;;
 ubnt,bullet-ac|\
 ubnt,nanobeam-ac|\
 ubnt,nanobeam-ac-gen2|\
