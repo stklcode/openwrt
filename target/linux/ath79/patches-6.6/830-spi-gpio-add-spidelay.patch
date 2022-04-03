@@ -1,0 +1,54 @@
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -445,6 +445,23 @@ config SPI_GPIO
+ 	  GPIO operations, you should be able to leverage that for better
+ 	  speed with a custom version of this driver; see the source code.
+ 
++config SPI_GPIO_DELAY
++	bool "Enable delays in the GPIO-based bitbanging SPI Master"
++	default n
++	depends on SPI_GPIO
++	help
++	  The GPIO bitbanging SPI master driver will run without any delays if this
++	  option is not set. This option will enable the use of delays in the
++	  operation of the GPIO bitbanging SPI master implementation to honour the
++	  maximum speed of very slow devices.
++
++	  To configure slow speed devices your board-specific setup logic must also
++	  provide platform data assigning the speed for a device on a given chip
++	  select of the GPIO bitbanging SPI master.
++
++	  If your platform requires SPI buses driven at slow speeds select yes. If
++	  in doubt, select no.
++
+ config SPI_IMG_SPFI
+ 	tristate "IMG SPFI controller"
+ 	depends on MIPS || COMPILE_TEST
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -7,6 +7,7 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/delay.h>
+ #include <linux/platform_device.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/of.h>
+@@ -107,6 +108,9 @@ static inline int getmiso(const struct s
+ 		return !!gpiod_get_value_cansleep(spi_gpio->miso);
+ }
+ 
++#if defined(CONFIG_SPI_GPIO_DELAY)
++#define spidelay(nsecs) ndelay(nsecs)
++#else
+ /*
+  * NOTE:  this clocks "as fast as we can".  It "should" be a function of the
+  * requested device clock.  Software overhead means we usually have trouble
+@@ -114,6 +118,7 @@ static inline int getmiso(const struct s
+  * we'll just assume we never need additional per-bit slowdowns.
+  */
+ #define spidelay(nsecs)	do {} while (0)
++#endif
+ 
+ #include "spi-bitbang-txrx.h"
+ 
